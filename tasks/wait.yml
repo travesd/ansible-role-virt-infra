@@ -50,12 +50,14 @@
 # This is not using wait_for module with path option anymore because it doesn't
 # work when kvmhost is remote
 - name: Wait for cloud-init to finish
-  shell: ssh {{ inventory_hostname }} stat /etc/cloud/cloud-init.disabled
-  register: result_wait_cloudinit
-  retries: 60
-  delay: 2
-  until: result_wait_cloudinit is succeeded
-  delegate_to: "{{ groups['kvmhost'][0] }}"
+  # shell: ssh {{ inventory_hostname }} stat /etc/cloud/cloud-init.disabled
+  # register: result_wait_cloudinit
+  # retries: 60
+  # delay: 2
+  # until: result_wait_cloudinit is succeeded
+  # delegate_to: "{{ virt_infra_mgmt_host }}"
+  wait_for:
+    path: /etc/cloud/cloud-init.disabled
   when:
     - inventory_hostname not in groups['kvmhost']
     - virt_infra_state == "running"
