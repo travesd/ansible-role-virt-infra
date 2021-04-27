@@ -2,6 +2,10 @@
 # Defaults for virt-infra Ansible role
 # Values which are commented out are optional
 
+# host to update ssh config 
+# virt_infra_mgmt_host: "{{ groups['kvmhost'][0] }}"
+virt_infra_mgmt_host: "127.0.0.1"
+
 ## Guest related
 
 # Valid guest states are: running, shutdown, destroyed or undefined

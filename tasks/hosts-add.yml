@@ -14,7 +14,7 @@
     block: |-
       {{ hostvars[item]['vm_ip'] }} {{ hostvars[item]['inventory_hostname'] }}
   become: true
-  delegate_to: "{{ groups['kvmhost'][0] }}"
+  delegate_to: "{{ virt_infra_mgmt_host }}"
   when:
     - hostvars[item]['vm_ip'] is defined and hostvars[item]['vm_ip']
     - hostvars[item]['virt_infra_state'] | default(virt_infra_state) == "running"
@@ -42,7 +42,7 @@
       {% endif %}
       {% endif %}
   become: false
-  delegate_to: "{{ groups['kvmhost'][0] }}"
+  delegate_to: "{{ virt_infra_mgmt_host }}"
   when:
     - hostvars[item]['vm_ip'] is defined and hostvars[item]['vm_ip']
     - hostvars[item]['virt_infra_state'] | default(virt_infra_state) == "running"

@@ -40,7 +40,7 @@
     block: |-
       {{ hostvars[item]['result_keyscan']['stdout'] }}
   become: false
-  delegate_to: "{{ groups['kvmhost'][0] }}"
+  delegate_to: "{{ virt_infra_mgmt_host }}"
   when:
     - hostvars[item]['result_keyscan']['stdout'] is defined and hostvars[item]['result_keyscan']['stdout']
     - hostvars[item]['virt_infra_state'] | default(virt_infra_state) == "running"
