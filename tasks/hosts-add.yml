@@ -12,9 +12,9 @@
     state: present
     marker: "# {mark} {{ hostvars[item]['inventory_hostname'] }} managed by virt_infra Ansible playbook"
     block: |-
-      {{ hostvars[item]['vm_ip'] }} {{ hostvars[item]['inventory_hostname'] }}
+      {{ hostvars[item]['vm_ip'] }} {{ hostvars[item]['inventory_hostname'] }} {{ hostvars[item]['virt_infra_hostname'] | default('') }}
   become: true
-  delegate_to: "{{ virt_infra_mgmt_host }}"
+  delegate_to: "{{ virt_infra_kvm_host }}"
   when:
     - hostvars[item]['vm_ip'] is defined and hostvars[item]['vm_ip']
     - hostvars[item]['virt_infra_state'] | default(virt_infra_state) == "running"
@@ -26,10 +26,10 @@
     create: true
     mode: 0600
     state: present
-    path: "{{ hostvars[groups['kvmhost'][0]].ansible_env.HOME }}/.ssh/config"
+    path: "{{ virt_infra_mgmt_host_ssh_path }}/config"
     marker: "# {mark} {{ hostvars[item]['inventory_hostname'] }} managed by virt_infra Ansible playbook"
     block: |-
-      Host {{ hostvars[item]['vm_ip'] }} {{ hostvars[item]['inventory_hostname'] }}
+      Host {{ hostvars[item]['vm_ip'] }} {{ hostvars[item]['inventory_hostname'] }} {{ hostvars[item]['virt_infra_hostname'] | default('') }}
         Hostname  {{ hostvars[item]['vm_ip'] }}
         User {{ hostvars[item]['virt_infra_user'] | default(hostvars[groups['kvmhost'][0]].ansible_env.USER) }}
       {% if hostvars[item]['virt_infra_ssh_keys'] is not defined %}

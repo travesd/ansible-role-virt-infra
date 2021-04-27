@@ -35,7 +35,7 @@
     create: true
     mode: 0600
     state: present
-    path: "{{ hostvars[groups['kvmhost'][0]].ansible_env.HOME }}/.ssh/known_hosts"
+    path: "{{ virt_infra_mgmt_host_ssh_path }}/known_hosts"
     marker: "# {mark} {{ hostvars[item]['inventory_hostname'] }} managed by virt_infra Ansible playbook"
     block: |-
       {{ hostvars[item]['result_keyscan']['stdout'] }}

@@ -4,7 +4,11 @@
 
 # host to update ssh config 
 # virt_infra_mgmt_host: "{{ groups['kvmhost'][0] }}"
+# virt_infra_ssh_config_path: "{{ hostvars[groups['kvmhost'][0]].ansible_env.HOME }}/.ssh"
+
+virt_infra_kvm_host: "{{ groups['kvmhost'][0] }}"
 virt_infra_mgmt_host: "127.0.0.1"
+virt_infra_mgmt_host_ssh_path: "{{ lookup('env', 'HOME') }}/.ssh"
 
 ## Guest related
 
