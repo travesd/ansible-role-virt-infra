@@ -47,7 +47,26 @@
   <ip address='{{ item.ip_address | default("192.168.122.1") }}' netmask='{{ item.subnet | default("255.255.255.0") }}'>
     {% if item.dhcp_start is defined and item.dhcp_start and item.dhcp_end is defined and item.dhcp_end %}
     <dhcp>
-      <range start='{{ item.dhcp_start |default("192.168.122.2") }}' end='{{ item.dhcp_end |default("192.168.122.254") }}'/>
+      {% set dhcp_start = item.dhcp_start | default("192.168.122.2") %}
+      {% set dhcp_end = item.dhcp_end | default("192.168.122.200") %}
+      <range start='{{ dhcp_start }}' end='{{ dhcp_end }}'/>
+      {%- if item.map_ips is defined and item.map_ips | bool == true %}
+
+      {%- for i in range(dhcp_start.split(".")[3] | int, dhcp_end.split(".")[3] | int) %}
+      {% set ip_list = dhcp_start.split(".")[0:3] %}
+      {{ ip_list.append(i) }} 
+
+      {% set mac_list = ["52", "54"] %}
+      {%- for i in ip_list %}
+      {{ mac_list.append(('%#x' % i | int) | replace("0x", "")) }}
+      {%- endfor %}
+
+      {% set vm_mac = mac_list | join(":") %}
+      {% set vm_ip = ip_list | join(".") %}
+      <host mac="{{ vm_mac }}" ip="{{ vm_ip }}"/>
+      {%- endfor %}
+
+      {% endif %}
     </dhcp>
     {% endif %}
   </ip>

@@ -28,3 +28,4 @@
   when:
     - inventory_hostname in groups['kvmhost']
     - hostvars[groups['kvmhost'][0]].result_ssh_key_gen.filename is defined and hostvars[groups['kvmhost'][0]].result_ssh_key_gen.filename
+
